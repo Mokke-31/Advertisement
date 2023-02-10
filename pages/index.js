@@ -1,18 +1,22 @@
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
-import Account from '../components/EditAd'
+import Table from '../components/Table'
+import Link from 'next/link';
 
 const Home = () => {
-  const session = useSession()
+  // const session = useSession()
   const supabase = useSupabaseClient()
 
   return (
     <div className="container" style={{ padding: '50px 0 100px 0' }}>
-      {!session ? (
-        <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme="dark" />
-      ) : (
-        <Account session={session} />
-      )}
+      <Table />
+      <button>
+        <Link
+          href={`/addAdvert`}
+        >
+          Add new Advertisement
+        </Link>
+    </button>
     </div>
   )
 }
