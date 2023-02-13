@@ -28,6 +28,7 @@ const viewAds = () => {
       if (data) {
         setAdvertisements(data)
         setFetchError(null)
+        console.log(data)
       }
     }
 

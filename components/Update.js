@@ -1,28 +1,39 @@
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
 import supabase from "../config/supabaseClient";
 
 const UpdateAd = ({id}) => {
-  // const { id } = params;
-
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [start_date, setStartDate] = useState('');
   const [end_date, setEndDate] = useState('');
   const [formError, setFormError] = useState(null);
+  const [image_url, setImageUrl] = useState(null)
+  const [uploading, setUploading] = useState(false);
+
+  const uploadImage = (e) => {
+    setImageUrl(e.target.files[0]) 
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!name || !description || !start_date || !end_date || !end_date) {
+    if (!name || !description || !start_date || !end_date || !image_url) {
       setFormError('Please fill in all the fields correctly.')
       return
     }
 
     const { data, error } = await supabase
       .from('advertisements')
-      .update({ name, description, start_date, end_date })
+      .update({ name, description, start_date, end_date, image_url })
       .eq('id', id)
+
+    const newUUID = crypto.randomUUID();
+    await supabase.storage.from('images').upload(`${newUUID}`, image_url);
+    const { error: message } = await supabase
+      .from('advertisements')
+      .update({ image_url: newUUID })
+      .eq('id', id);
+    setImageUrl(null);
 
     if (error) {
       setFormError('Please fill in all the fields correctly.')
@@ -51,6 +62,7 @@ const UpdateAd = ({id}) => {
         setDescription(data.description)
         setStartDate(data.start_date)
         setEndDate(data.end_date)
+        setImageUrl(data.image_url)
       }
     }
 
@@ -60,13 +72,34 @@ const UpdateAd = ({id}) => {
   return (
     <div className="page create">
       <form onSubmit={handleSubmit}>
-        {/* <label htmlFor="name">Image </label>
-          <input 
-            type="file" 
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          /> */}
+      <div>
+          {image_url ? (
+            <img
+              src={image_url}
+              alt="Image"
+              className="image upload"
+              
+            />
+          ) : (
+            <div className="image no-image" />
+          )}
+          <div >
+            <label className="button primary block" htmlFor="single">
+              {uploading ? 'Uploading ...' : 'Upload'}
+            </label>
+            <input
+              style={{
+                visibility: 'hidden',
+                position: 'absolute',
+              }}
+              type="file"
+              id="single"
+              accept="image/*"
+              onChange={(e) => uploadImage(e)}
+              disabled={uploading}
+            />
+          </div>
+        </div>
         <label htmlFor="name">Name: </label>
         <input 
           type="text" 

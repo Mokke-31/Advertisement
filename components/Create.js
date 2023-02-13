@@ -1,81 +1,83 @@
+// import { useQueryClient } from 'react-query';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import supabase from '@/supabase';
+import supabase from "../config/supabaseClient";
 
 const CreateNewAd = () => {
-  
-  const [ad_image, setAdImage] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [start_date, setStartDate] = useState('');
   const [end_date, setEndDate] = useState('');
   const [formError, setFormError] = useState(null);
-  const [uploading, setUploading] = useState(false)
+  const [uploading, setUploading] = useState(false);
+  const [image_url, setImageUrl] = useState(null)
 
-  const handleSubmit = async (e) => {
-      e.preventDefault()
-
-      if (!name || !description || !start_date || !end_date) {
-      // if (!ad_iamge || !name || !description || !start_date || !end_date) {
-
-          setFormError("Please fill out all fields correctly")
-          return
-      }
-
-      const { data, error } = await supabase
-        .from('advertisements')
-        .insert([{ name, description, start_date, end_date}])
-
-      if (error) {
-        console.log(error)
-        setFormError("Please fill out all fields correctly")
-      }
-      if (data) {
-        console.log(data)
-        setFormError(null)
-      }
+  const uploadImage = (e) => {
+    setImageUrl(e.target.files[0]) 
   }
 
-  // const uploadImage = async (event) => {
-  //   try {
-  //     setUploading(true)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-  //     if (!event.target.files || event.target.files.length === 0) {
-  //       throw new Error('You must select an image to upload.')
-  //     }
+    if (!name || !description || !start_date || !end_date) {
+      setFormError("Please fill out all fields correctly")
+      return
+    }
 
-  //     const file = event.target.files[0]
-  //     const fileExt = file.name.split('.').pop()
-  //     const fileName = `${uid}.${fileExt}`
-  //     const filePath = `${fileName}`
+    const { data, error, status } = await supabase
+      .from('advertisements')
+      .insert([{ name, description, start_date, end_date}])
+      .select('id')
 
-  //     let { error: uploadError } = await supabase.storage
-  //       .from('images')
-  //       .upload(filePath, file, { upsert: true })
+      const newUUID = crypto.randomUUID();
+      await supabase.storage.from('images').upload(`${newUUID}`, image_url);
+      const { error: message } = await supabase
+        .from('advertisements')
+        .update({ image_url: newUUID })
+        .eq('id', data[0].id);
+      setImageUrl(null);
 
-  //     if (uploadError) {
-  //       throw uploadError
-  //     }
-
-  //     onUpload(filePath)
-  //   } catch (error) {
-  //     alert('Error uploading avatar!')
-  //     console.log(error)
-  //   } finally {
-  //     setUploading(false)
-  //   }
-  // }
+    if (error) {
+      console.log(error)
+      setFormError("Please fill out all fields correctly")
+    }
+    if (data) {
+      console.log(data)
+      setFormError(null)
+    }
+  }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        {/* <label htmlFor="ad_image">Advertisement Image </label>
-          <input
+        <div>
+          {image_url ? (
+            <img
+              src={image_url}
+              alt="Image"
+              className="image upload"
+              
+            />
+          ) : (
+            <div className="image no-image" />
+          )}
+          <div >
+            <label className="button primary block" htmlFor="single">
+              {uploading ? 'Uploading ...' : 'Upload'}
+            </label>
+            <input
+              style={{
+                visibility: 'hidden',
+                position: 'absolute',
+              }}
               type="file"
-              id="ad_image"
-              value={ad_image}
-              onChange={(e) => setAdImage(e.target.value)}
-          />   */}
+              id="single"
+              accept="image/*"
+              onChange={(e) => uploadImage(e)}
+              disabled={uploading}
+            />
+          </div>
+        </div>
         <label htmlFor="name">Name: </label>
         <input
             type="text"
