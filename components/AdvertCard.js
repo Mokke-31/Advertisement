@@ -60,11 +60,6 @@ const AdvertCard = ({ advert, onDelete }) => {
         <p>End Date: </p>
         <p>{advert.end_date}</p>
         <div className="buttons">
-          {/* {advertisements.map(advert => (
-            <Link href={'/update/' + advert.id} key={advert.id}>
-              <EditIcon>edit</EditIcon>
-            </Link>
-          ))} */}
             <Link href={'/update/' + advert.id} key={advert.id} id={advert.id}>
               <EditIcon>edit</EditIcon>
             </Link>

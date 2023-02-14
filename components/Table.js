@@ -31,9 +31,6 @@ export default function advertTable () {
     fetchAds()
   })
 
-  // Create a single supabase client for interacting with your database
-  // const supabase = createClient('https://ulefnqafgjbxykfehntu.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsZWZucWFmZ2pieHlrZmVobnR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzU4NDYwNTcsImV4cCI6MTk5MTQyMjA1N30.k3r7e4xsj_jeiS0FsbwFWxBe0WOtXRMsNT9igXJryz0')
-
     return (
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

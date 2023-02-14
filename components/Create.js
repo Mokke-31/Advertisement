@@ -1,6 +1,4 @@
-// import { useQueryClient } from 'react-query';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import supabase from "../config/supabaseClient";
 import Link from 'next/link';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -24,11 +22,7 @@ const CreateNewAd = () => {
     if (!name || !description || !start_date || !end_date) {
       setFormError("Please fill out all fields correctly")
       return
-    } 
-      // alert("Advertisement record created successfully!");
-      // confirm("Click Ok to return to home view");
-      // window.location = '/viewAds';
-    
+    }
 
     const { data, error, status } = await supabase
       .from('advertisements')
@@ -84,7 +78,7 @@ const CreateNewAd = () => {
             value={start_date}
             onChange={(e) => setStartDate(e.target.value)}
           />
-        <label htmlFor="endDate">Name: </label>
+        <label htmlFor="endDate">End Date: </label>
         <input
             type="date"
             id="end_date"

@@ -14,7 +14,6 @@ const viewAds = () => {
       // confirm("Click Ok to return to home view");
       // window.location = '/viewAds';
       // return prevAdverts.filter(advert => advert.id !== id)
-      
     })
   }
 
@@ -47,7 +46,7 @@ const viewAds = () => {
         <ul>
           <li><a class="active" href={'/viewAds'}>Home</a></li>
           <li><a href={'/addAdvert'}>Add Advertisement</a></li>
-          <li><a href={'/'}>Table View</a></li>
+          <li><a href={'/viewTable'}>Table View</a></li>
         </ul>
       </div>
       <div>

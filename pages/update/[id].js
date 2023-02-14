@@ -1,9 +1,7 @@
-import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import UpdateAd from '@/components/Update'
 import { useRouter } from 'next/router'
 
-const Home = () => {
+const updateAdvert = () => {
   const router = useRouter()
   const {id} = router.query
   return (
@@ -13,4 +11,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default updateAdvert
