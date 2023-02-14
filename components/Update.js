@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../config/supabaseClient";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import Link from "next/link";
 
 const UpdateAd = ({id}) => {
   const [name, setName] = useState('');
@@ -39,6 +41,9 @@ const UpdateAd = ({id}) => {
       setFormError('Please fill in all the fields correctly.')
     }
     if (data) {
+      alert("Advertisement record updated successfully!");
+      confirm("Click Ok to return to home view");
+      window.location = '/viewAds';
       setFormError(null)
     }
   }
@@ -53,7 +58,7 @@ const UpdateAd = ({id}) => {
         .single()
 
       if (error) {
-        console.log("gg go next")
+        console.log("error occured retriving advertisement data")
       }
 
       if (data) {
@@ -72,34 +77,9 @@ const UpdateAd = ({id}) => {
   return (
     <div className="page create">
       <form onSubmit={handleSubmit}>
-      <div>
-          {image_url ? (
-            <img
-              src={image_url}
-              alt="Image"
-              className="image upload"
-              
-            />
-          ) : (
-            <div className="image no-image" />
-          )}
-          <div >
-            <label className="button primary block" htmlFor="single">
-              {uploading ? 'Uploading ...' : 'Upload'}
-            </label>
-            <input
-              style={{
-                visibility: 'hidden',
-                position: 'absolute',
-              }}
-              type="file"
-              id="single"
-              accept="image/*"
-              onChange={(e) => uploadImage(e)}
-              disabled={uploading}
-            />
-          </div>
-        </div>
+      <Link href={'/viewAds'}>
+        <ArrowBackIosIcon>Back</ArrowBackIosIcon>
+      </Link>
         <label htmlFor="name">Name: </label>
         <input 
           type="text" 
@@ -130,6 +110,35 @@ const UpdateAd = ({id}) => {
           value={end_date}
           onChange={(e) => setEndDate(e.target.value)}
         />
+
+        <div>
+          {image_url ? (
+            <img
+              src={image_url}
+              alt="Image"
+              className="image upload"
+              
+            />
+            ) : (
+              <div className="image no-image" />
+            )}
+            <div >
+              <label className="image-button" htmlFor="single">
+                {uploading ? 'Uploading ...' : 'Upload'}
+              </label>
+              <input
+                style={{
+                  visibility: 'hidden',
+                  position: 'absolute',
+                }}
+                type="file"
+                id="single"
+                accept="image/*"
+                onChange={(e) => uploadImage(e)}
+                disabled={uploading}
+              />
+            </div>
+        </div>
 
         <button>Update Advertisement Details</button>
 

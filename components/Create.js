@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import supabase from "../config/supabaseClient";
+import Link from 'next/link';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const CreateNewAd = () => {
   const [name, setName] = useState('');
@@ -22,7 +24,11 @@ const CreateNewAd = () => {
     if (!name || !description || !start_date || !end_date) {
       setFormError("Please fill out all fields correctly")
       return
-    }
+    } 
+      // alert("Advertisement record created successfully!");
+      // confirm("Click Ok to return to home view");
+      // window.location = '/viewAds';
+    
 
     const { data, error, status } = await supabase
       .from('advertisements')
@@ -43,6 +49,9 @@ const CreateNewAd = () => {
     }
     if (data) {
       console.log(data)
+      alert("Advertisement record created successfully!");
+      confirm("Click Ok to return to home view");
+      window.location = '/viewAds';
       setFormError(null)
     }
   }
@@ -50,34 +59,10 @@ const CreateNewAd = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          {image_url ? (
-            <img
-              src={image_url}
-              alt="Image"
-              className="image upload"
-              
-            />
-          ) : (
-            <div className="image no-image" />
-          )}
-          <div >
-            <label className="button primary block" htmlFor="single">
-              {uploading ? 'Uploading ...' : 'Upload'}
-            </label>
-            <input
-              style={{
-                visibility: 'hidden',
-                position: 'absolute',
-              }}
-              type="file"
-              id="single"
-              accept="image/*"
-              onChange={(e) => uploadImage(e)}
-              disabled={uploading}
-            />
-          </div>
-        </div>
+      <Link href={'/viewAds'}>
+        <ArrowBackIosIcon>Back</ArrowBackIosIcon>
+      </Link>
+        
         <label htmlFor="name">Name: </label>
         <input
             type="text"
@@ -106,6 +91,35 @@ const CreateNewAd = () => {
             value={end_date}
             onChange={(e) => setEndDate(e.target.value)}
         />
+        <label htmlFor="imageUpload">Add advertisement image here: </label>
+        <div>
+          {image_url ? (
+            <img
+              src={image_url}
+              alt="Image"
+              className="image upload"
+              
+            />
+          ) : (
+            <div className="image no-image" />
+          )}
+          <div >
+            <label className="image-button" htmlFor="single">
+              {uploading ? 'Uploading ...' : 'Upload'}
+            </label>
+            <input
+              style={{
+                visibility: 'hidden',
+                position: 'absolute',
+              }}
+              type="file"
+              id="single"
+              accept="image/*"
+              onChange={(e) => uploadImage(e)}
+              disabled={uploading}
+            />
+          </div>
+        </div>
 
         <button>Create Advertisement</button>
         {formError && <p className="error">{formError}</p>}

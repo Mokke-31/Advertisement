@@ -10,7 +10,11 @@ const viewAds = () => {
 
   const handleDelete = (id) => {
     setAdvertisements(prevAdverts => {
-      return prevAdverts.filter(advert => advert.id !== id)
+      alert("Advertisement record deleted successfully!");
+      // confirm("Click Ok to return to home view");
+      // window.location = '/viewAds';
+      // return prevAdverts.filter(advert => advert.id !== id)
+      
     })
   }
 
@@ -37,22 +41,32 @@ const viewAds = () => {
   }, [])
 
   return (
-    <div className="page home">
-      {fetchError && (<p>{fetchError}</p>)}
-      {advertisements && (
-        <div className="advertisements">
-          {/* order-by buttons */}
-          <div className="advert-grid">
-            {advertisements.map(advert => (
-              <AdvertCard 
-                key={advert.id} 
-                advert={advert} 
-                onDelete={handleDelete}
-              />
-            ))}
+    // <div className="page home">
+    <div>
+      <div>
+        <ul>
+          <li><a class="active" href={'/viewAds'}>Home</a></li>
+          <li><a href={'/addAdvert'}>Add Advertisement</a></li>
+          <li><a href={'/'}>Table View</a></li>
+        </ul>
+      </div>
+      <div>
+        {fetchError && (<p>{fetchError}</p>)}
+        {advertisements && (
+          <div className="advertisements">
+            <div className="advert-grid">
+              {advertisements.map(advert => (
+                <AdvertCard 
+                  key={advert.id} 
+                  advert={advert} 
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      
     </div>
   )
 }

@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import supabase from '@/supabase';
+import supabase from '../config/supabaseClient';
 
 export default function advertTable () {
   const [fetchError, setFetchError] = useState(null)
