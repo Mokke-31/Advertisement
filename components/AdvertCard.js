@@ -4,17 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link"
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Delete from '@mui/icons-material/Delete';
 
-
-// export const getStaticProps = async () => {
-//   const res = await fetch()
-//   const data = await res.json();
-
-//   return {
-//       props: { adverts: data }
-//   }
-// }
+const CDNURL = "https://ulefnqafgjbxykfehntu.supabase.co/storage/v1/object/public/images/"
 
 const AdvertCard = ({ advert, onDelete }) => {
   const [advertisements, setAdvertisements] = useState(null)
@@ -59,9 +50,14 @@ const AdvertCard = ({ advert, onDelete }) => {
 
     return (
       <div className="advert-card">
+        <img className="image-view" src={CDNURL + advert.image_url} />
+        <p>Title: </p>
         <h3>{advert.name}</h3>
+        <p>Description: </p>
         <p>{advert.description}</p>
+        <p>Start Date: </p>
         <p>{advert.start_date}</p>
+        <p>End Date: </p>
         <p>{advert.end_date}</p>
         <div className="buttons">
           {/* {advertisements.map(advert => (

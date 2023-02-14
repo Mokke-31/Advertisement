@@ -6,11 +6,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import supabase from '@/supabase';
+import supabase from '../config/supabaseClient';
 
 export default function advertTable () {
-const [dataRows, setDataRows] = useState([]);
-const date = new Date().getTime();
+  const [fetchError, setFetchError] = useState(null)
+  const [dataRows, setDataRows] = useState([]);
+
+  const date = new Date().getTime();
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -18,6 +20,13 @@ const date = new Date().getTime();
       .from('advertisements')
       .select(`*`)
       setDataRows(data)
+
+      if (error) {
+        setFetchError('Could not retrieve advertisement data')
+        setDataRows([])
+        console.log(error)
+      }
+
     }
     fetchAds()
   })
@@ -40,16 +49,18 @@ const date = new Date().getTime();
           <TableBody>
             {dataRows.map((row) => {
               let adStatus = "";
-              const startDate = Date(row.start_date);
-              const endDate = Date(row.end_date);
+              const startDate = new Date(row.start_date);
+              const endDate = new Date(row.end_date);
 
-              if (date <= endDate && startDate <= date ) {
+              if (date <= endDate && startDate <= date) {
                 adStatus = "active";
               } else {
                 adStatus = "inactive";
+                console.log(date <= endDate)
               } 
 
               return (
+                
               <TableRow
                 key={row.name}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -62,9 +73,7 @@ const date = new Date().getTime();
                 <TableCell align="right">{row.end_date}</TableCell>
                 <TableCell align="right">{adStatus}</TableCell>
               </TableRow>
-            )}
-            
-            )}
+            )})}
           </TableBody>
         </Table>
       </TableContainer>

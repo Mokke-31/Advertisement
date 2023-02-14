@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 
-export default function Image({ uid, url, size, onUpload }) {
+export default function Image({ uuid, url, size, onUpload }) {
   const supabase = useSupabaseClient()
   const [imageUrl, setImageUrl] = useState(null)
   const [uploading, setUploading] = useState(false)
@@ -12,7 +12,7 @@ export default function Image({ uid, url, size, onUpload }) {
 
   async function downloadImage(path) {
     try {
-      const { data, error } = await supabase.storage.from('images').download(path)
+      const { data, error } = await supabase.storage.from("images").download(path)
       if (error) {
         throw error
       }
